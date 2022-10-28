@@ -22,9 +22,11 @@ masks = np.zeros((100, 5, 5), dtype=bool)
 for input in inputdata:
     masks = masks | np.where(boards == int(input), True, False)
     # check if anyone has won
-    mask = masks[2]
-    if np.any(np.all(mask, 0)) or np.any(np.all(mask, 1)):
-            break
-
-print(masks)
-
+    won = None
+    for boardindex, mask in enumerate(masks):
+        if np.any(np.all(mask, axis=0) | np.all(mask, axis=1)):
+            finalscore = int(input) * np.sum(boards[boardindex][~mask])
+            print(f"board {boardindex} has won with finalscore {finalscore}")
+            won = True
+    if won:
+        break
