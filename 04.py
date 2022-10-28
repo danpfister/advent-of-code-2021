@@ -30,3 +30,26 @@ for input in inputdata:
             won = True
     if won:
         break
+
+############################## PART 2 ##############################
+
+masks = np.zeros((100, 5, 5), dtype=bool)
+hasntwon = np.ones((100), dtype=bool)
+for input in inputdata:
+    masks = masks | np.where(boards == int(input), True, False)
+    # check if anyone has won
+    done = None
+    for boardindex, mask in enumerate(masks):
+        if np.any(np.all(mask, axis=0) | np.all(mask, axis=1)):
+            hasntwon[boardindex] = False
+        if np.count_nonzero(hasntwon) == 1:
+            lastboard = np.argwhere(hasntwon)[0]
+        if np.count_nonzero(hasntwon) == 0:
+            lastinput = input
+            lastboardstate = boards[lastboard][~masks[lastboard]]
+            done = True
+    if done:
+        break
+
+finalscore = int(lastinput) * np.sum(lastboardstate)
+print(f"board {lastboard[0]} has finished last with finalscore {finalscore}")
