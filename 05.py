@@ -12,20 +12,23 @@ for lineindex, line in enumerate(data_raw):
         inputdata[lineindex][axis] = int(coordinate)
 
 
-
-
-############################## PART 1 ##############################
+############################## PART 1 & 2 ##############################
 
 field = np.zeros((1000, 1000))
 for input in inputdata:
-    x1, y1, x2, y2 = input[0], input[1], input[2], input[3]
+    x1, y1, x2, y2 = input
     if x1 == x2:
         direction = 1 if y2 > y1 else -1
         for y in range(y1, y2 + direction, direction):
             field[x1][y] += 1
-    if y1 == y2:
+    elif y1 == y2:
         direction = 1 if x2 > x1 else -1
         for x in range(x1, x2 + direction, direction):
             field[x][y1] += 1
+    else:
+        xdirection = 1 if x2 > x1 else -1
+        ydirection = 1 if y2 > y1 else -1
+        for x, y in zip(range(x1, x2 + xdirection, xdirection), range(y1, y2 + ydirection, ydirection), strict=True):
+            field[x][y] += 1
 
 print(f"Number of points where at least two lines overlap: {len(np.argwhere(field >= 2))}")
