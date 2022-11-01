@@ -23,8 +23,22 @@ print(len(currentfish))
 
 ############################## PART 2 ##############################
 
-## setup for c++ test
-temp = open(r"input\06_m.txt", "w")
-for fish in inputdata:
-    temp.write(str(fish) + "\n")
-temp.close()
+# it's big brain time
+
+currentfish = np.empty((9), dtype=np.int64)
+for count in range(9):
+    currentfish[count] = np.count_nonzero(inputdata == count)
+
+for day in range(256):
+    newfish = np.empty((9), dtype=np.int64)
+    newfish[0] = currentfish[1]
+    newfish[1] = currentfish[2]
+    newfish[2] = currentfish[3]
+    newfish[3] = currentfish[4]
+    newfish[4] = currentfish[5]
+    newfish[5] = currentfish[6]
+    newfish[6] = currentfish[7] + currentfish[0]
+    newfish[7] = currentfish[8]
+    newfish[8] = currentfish[0]
+    currentfish = newfish
+print(np.sum(currentfish))
