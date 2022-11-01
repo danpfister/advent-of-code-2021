@@ -6,7 +6,7 @@ line = file.readline()
 inputdata = np.asarray(re.split(r'\D', line)[:-1], dtype=np.int32)
 
 
-############################## PART 1 & 2 ##############################
+############################## PART 1 ##############################
 
 currentfish = inputdata
 for day in range(80):
@@ -20,3 +20,11 @@ for day in range(80):
     currentfish = newfish
 
 print(len(currentfish))
+
+############################## PART 2 ##############################
+
+## setup for c++ test
+temp = open(r"input\06_m.txt", "w")
+for fish in inputdata:
+    temp.write(str(fish) + "\n")
+temp.close()
