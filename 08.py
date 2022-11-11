@@ -33,7 +33,19 @@ print(f"Number of occurences of digits 1, 4, 7, 8: {np.sum(numberOfDigits)}")
 
 ############################## PART 2 ##############################
 
+def compare(string1, string2):
+    unique = []
+    for char in string1:
+        unique.append(char)
+    for char in string2:
+        if char in unique:
+            unique.remove(char)
+        else:
+            unique.append(char)
+    return unique
+
 letters = 'abcdefg'
+totalsum = 0
 
 for entry in inputdata:
     configuration = {}
@@ -47,16 +59,59 @@ for entry in inputdata:
         lettercount[letter] = count
     # signal with 4 occurences is segment 4,
     # signal with 6 occurences is segment 1,
-    # signal with 8 occurences is segment 2
     # and signal with 9 occurences is segment 5
     for signal, count in lettercount.items():
         match count:
             case 4:
-                configuration[signal] = 4
+                configuration[4] = signal
             case 6:
-                configuration[signal] = 1
+                configuration[1] = signal
             case 9:
-                configuration[signal] = 5
+                configuration[5] = signal
             case _:
                 pass
-    print(configuration )
+    # find 1 (to determine difference between 0 and 6 afterwards)
+    one = None
+    for index in range(10):
+        match len(entry[index]):
+            case 2:
+                one = entry[index]
+        if one:
+            break
+    # look at output signals and determine the digit
+    values = ""
+    for value in entry[10:14]:
+        match len(value):
+            case 2:
+                values += '1'
+            case 4:
+                values += '4'
+            case 3:
+                values += '7'
+            case 7:
+                values += '8'
+            case 5:
+                # it's either a 2, 3 or 5
+                if configuration[4] in value and configuration[1] not in value and configuration[5] not in value:
+                    values += '2'
+                elif configuration[4] not in value and configuration[1] not in value and configuration[5] in value:
+                    values += '3'
+                elif configuration[4] not in value and configuration[1] in value and configuration[5] in value:
+                    values += '5'
+                else:
+                    print("something wrong")
+            case 6:
+                # it's either a 6, 9 or 0
+                if configuration[4] in value and configuration[1] in value and configuration[5] in value:
+                    # 6 or 0
+                    if one[0] in value and one[1] in value:
+                        values += '0'
+                    else:
+                        values += '6'
+                elif configuration[4] not in value and configuration[1] in value and configuration[5] in value:
+                    values += '9'
+                else:
+                    print("something wrong")
+    print(values)
+    totalsum += int(values)
+print(totalsum)
