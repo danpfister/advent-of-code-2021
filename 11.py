@@ -16,7 +16,7 @@ for lineindex, line in enumerate(raw):
         energy[lineindex][charindex] = char
 
 total_flashes = 0
-for i in range(100):
+for step in range(1000):
     flashed = np.zeros_like(energy, dtype=bool)
     energy += 1
     flashing = np.logical_and(energy > 9, np.logical_not(flashed))
@@ -26,4 +26,8 @@ for i in range(100):
         flashing = np.logical_and(energy > 9, np.logical_not(flashed))
     energy[flashed] = 0
     total_flashes += np.sum(flashed)
-print(f"total flashes after 100 steps: {total_flashes}")
+    if step == 99:
+        print(f"total flashes after 100 steps: {total_flashes}")
+    if np.all(energy == 0):
+        print(f"all octopuses flashing after {step + 1} steps")
+        break
